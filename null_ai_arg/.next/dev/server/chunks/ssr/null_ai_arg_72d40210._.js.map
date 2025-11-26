@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/jackjesse/null_ai_arg/src/app/layout.tsx"],"sourcesContent":["import type { Metadata } from 'next'\nimport './globals.css'\n\nexport const metadata: Metadata = {\n  title: 'M E R G E — Underground Skate Conspiracy',\n  description: 'A digital transmission from the depths. The merge has already begun.',\n  icons: {\n    icon: '/favicon.ico',\n  },\n}\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode\n}) {\n  return (\n    <html lang=\"en\">\n      <body className=\"xerox-texture\">\n        {children}\n      </body>\n    </html>\n  )\n}\n"],"names":[],"mappings":";;;;;;;;;AAGO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;IACb,OAAO;QACL,MAAM;IACR;AACF;AAEe,SAAS,WAAW,EACjC,QAAQ,EAGT;IACC,qBACE,6PAAC;QAAK,MAAK;kBACT,cAAA,6PAAC;YAAK,WAAU;sBACb;;;;;;;;;;;AAIT"}},
+    {"offset": {"line": 41, "column": 0}, "map": {"version":3,"sources":["file:///Users/jackjesse/null_ai_arg/node_modules/next/src/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = (\n  require('../../module.compiled') as typeof import('../../module.compiled')\n).vendored['react-rsc']!.ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":"AAAAA,OAAOC,OAAO,GACZC,QAAQ,wIACRC,QAAQ,CAAC,YAAY,CAAEC,kBAAkB","ignoreList":[0]}}]
+}

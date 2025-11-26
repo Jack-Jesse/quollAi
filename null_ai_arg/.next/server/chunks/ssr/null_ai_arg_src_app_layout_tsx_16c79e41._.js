@@ -1,0 +1,3 @@
+module.exports=[77248,a=>{"use strict";var b=a.i(3753);function c({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{className:"xerox-texture",children:a})})}a.s(["default",()=>c,"metadata",0,{title:"M E R G E — Underground Skate Conspiracy",description:"A digital transmission from the depths. The merge has already begun.",icons:{icon:"/favicon.ico"}}])}];
+
+//# sourceMappingURL=null_ai_arg_src_app_layout_tsx_16c79e41._.js.map

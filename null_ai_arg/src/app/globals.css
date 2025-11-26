@@ -1,0 +1,385 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --black: #000000;
+  --white: #FFFFFF;
+  --gray: #666666;
+  --red: #FF0000;
+}
+
+body {
+  background-color: var(--black);
+  color: var(--white);
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1.6;
+  font-size: 16px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,.02) 2px,
+      rgba(255,255,255,.02) 4px
+    );
+}
+
+/* Punk Zine Elements */
+.xerox-texture {
+  position: relative;
+}
+
+.xerox-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.cut-out {
+  border: 3px solid var(--white);
+  box-shadow: 5px 5px 0 rgba(255,255,255,0.2);
+  background: var(--black);
+}
+
+.ransom-note {
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.marquee {
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
+}
+
+/* Spinning animation for GIFs */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+/* Brutalist elements */
+.brutalist-link {
+  color: var(--white);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration-thickness: 2px;
+}
+
+.brutalist-link:hover {
+  background-color: var(--white);
+  color: var(--black);
+  text-decoration: none;
+}
+
+.brutalist-button {
+  border: 3px solid var(--white);
+  background: var(--black);
+  color: var(--white);
+  padding: 12px 24px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 900;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.05s;
+  letter-spacing: 1px;
+  box-shadow: 6px 6px 0 var(--white);
+}
+
+.brutalist-button:hover {
+  background: var(--white);
+  color: var(--black);
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--white);
+}
+
+.brutalist-button:active {
+  transform: translate(6px, 6px);
+  box-shadow: none;
+}
+
+/* Table-based layout (old school) */
+.old-table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 3px solid var(--white);
+}
+
+.old-table td {
+  border: 1px solid var(--gray);
+  padding: 16px;
+  background: var(--black);
+}
+
+.old-table tr:nth-child(even) td {
+  background: #0a0a0a;
+}
+
+/* Glitch effect */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch {
+  animation: glitch 0.3s infinite;
+}
+
+/* Conspiracy/Esoteric aesthetic */
+.redacted {
+  background: var(--white);
+  color: var(--white);
+  cursor: help;
+  transition: all 0.3s;
+  user-select: none;
+  padding: 0 4px;
+}
+
+.redacted:hover {
+  background: transparent;
+  color: var(--white);
+}
+
+.classified {
+  border: 2px solid var(--red);
+  padding: 2px 6px;
+  display: inline-block;
+  font-weight: bold;
+  background: var(--black);
+  color: var(--red);
+  font-size: 0.85em;
+  letter-spacing: 1px;
+}
+
+.triangle-symbol::before {
+  content: '▲ ';
+  color: var(--red);
+}
+
+.eye-symbol::before {
+  content: '◉ ';
+  font-size: 1.2em;
+  color: var(--red);
+}
+
+.pentagram::before {
+  content: '⛧ ';
+  font-size: 1.3em;
+  color: var(--red);
+}
+
+.ankh::before {
+  content: '☥ ';
+  font-size: 1.3em;
+  color: var(--red);
+}
+
+/* Punk Zine Aesthetic */
+.torn-edge {
+  position: relative;
+  clip-path: polygon(
+    0% 2%, 3% 0%, 7% 3%, 12% 1%, 18% 4%, 23% 2%, 28% 5%, 33% 3%,
+    38% 6%, 43% 4%, 48% 7%, 53% 5%, 58% 8%, 63% 6%, 68% 9%, 73% 7%,
+    78% 10%, 83% 8%, 88% 11%, 93% 9%, 97% 12%, 100% 10%,
+    100% 90%, 97% 88%, 93% 91%, 88% 89%, 83% 92%, 78% 90%, 73% 93%,
+    68% 91%, 63% 94%, 58% 92%, 53% 95%, 48% 93%, 43% 96%, 38% 94%,
+    33% 97%, 28% 95%, 23% 98%, 18% 96%, 12% 99%, 7% 97%, 3% 100%, 0% 98%
+  );
+}
+
+.tape {
+  position: relative;
+}
+
+.tape::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 80px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.tape-corner {
+  position: relative;
+}
+
+.tape-corner::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.paper-texture {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+
+.torn-bottom {
+  clip-path: polygon(
+    0 0, 100% 0, 100% 95%, 97% 93%, 93% 96%, 88% 94%, 83% 97%,
+    78% 95%, 73% 98%, 68% 96%, 63% 99%, 58% 97%, 53% 100%,
+    48% 98%, 43% 99%, 38% 97%, 33% 100%, 28% 98%, 23% 99%,
+    18% 97%, 12% 100%, 7% 98%, 3% 99%, 0 97%
+  );
+}
+
+.rotated-left {
+  transform: rotate(-1.5deg);
+}
+
+.rotated-right {
+  transform: rotate(1.5deg);
+}
+
+.glued {
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.3),
+    3px 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+.xerox-grain {
+  position: relative;
+  overflow: hidden;
+}
+
+.xerox-grain::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(255, 255, 255, 0.03) 1px,
+    rgba(255, 255, 255, 0.03) 2px
+  );
+  pointer-events: none;
+}
+
+.handwritten {
+  font-family: 'Courier New', monospace;
+  font-style: italic;
+  letter-spacing: 1px;
+  transform: rotate(-0.5deg);
+}
+
+.sticker {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--white);
+  color: var(--black);
+  border: 2px solid var(--black);
+  font-weight: bold;
+  font-size: 0.75rem;
+  transform: rotate(-3deg);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.collage-layer {
+  position: relative;
+  margin: -10px;
+  padding: 20px;
+}
+
+/* CRT screen effect */
+@keyframes flicker {
+  0%, 100% { opacity: 0.97; }
+  50% { opacity: 1; }
+}
+
+.crt-effect {
+  animation: flicker 0.15s infinite;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Under construction blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+/* Scanlines */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* Hit counter style */
+.hit-counter {
+  background: #000000;
+  border: 2px solid var(--terminal-green);
+  padding: 4px 8px;
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--terminal-green);
+}
