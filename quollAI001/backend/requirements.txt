@@ -1,0 +1,7 @@
+flask==3.0.3
+flask-cors==4.0.1
+fastai==2.7.14
+torch==2.2.0
+torchvision==0.17.0
+Pillow==10.3.0
+python-multipart==0.0.9
