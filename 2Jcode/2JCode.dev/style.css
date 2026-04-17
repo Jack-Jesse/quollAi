@@ -1,0 +1,420 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #007bff; /* A vibrant blue for main accents */
+    --secondary-color: #6c757d; /* A subtle grey for secondary text */
+    --background-color: #f8f9fa; /* Light grey background */
+    --surface-color: #ffffff; /* White for cards and main content areas */
+    --text-color: #343a40; /* Dark grey for general text */
+    --heading-color: #212529; /* Even darker for headings */
+    --border-color: #dee2e6; /* Light grey for borders */
+    --shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for depth */
+    --shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for interactive elements */
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    scroll-behavior: smooth;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+/* Buttons */
+.cta-button, .plan-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.cta-button:hover, .plan-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px);
+}
+
+.plan-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Header & Navigation */
+header {
+    background-color: var(--surface-color);
+    box-shadow: 0 2px 10px var(--shadow-light);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+nav .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 30px;
+}
+
+nav ul li a {
+    color: var(--heading-color);
+    font-weight: 500;
+    font-size: 1.05rem;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+/* Hero Section */
+#hero {
+    background: linear-gradient(to right, rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0.6)), url('https://source.unsplash.com/random/1600x900/?coding,ide') no-repeat center center/cover;
+    color: #ffffff;
+    text-align: center;
+    padding: 100px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+#hero h1 {
+    font-size: 3.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+#hero p {
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+/* Sections General */
+section {
+    padding: 80px 0;
+    text-align: center;
+}
+
+section:nth-of-type(even) {
+    background-color: var(--background-color);
+}
+
+section p {
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    font-size: 1.1rem;
+}
+
+/* Features Section */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.feature-item {
+    background-color: var(--surface-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px var(--shadow-medium);
+}
+
+.feature-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 40px;
+}
+
+.feature-item h3::before {
+    content: '🚀'; /* Example icon */
+    position: absolute;
+    left: 0;
+    font-size: 1.8rem;
+    top: -5px;
+}
+.feature-item:nth-child(2) h3::before { content: '🤝'; }
+.feature-item:nth-child(3) h3::before { content: '🔍'; }
+.feature-item:nth-child(4) h3::before { content: '🎨'; }
+
+
+/* Pricing Section */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.pricing-plan {
+    background-color: var(--surface-color);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pricing-plan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px var(--shadow-medium);
+}
+
+.pricing-plan h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.pricing-plan .price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 20px;
+}
+
+.pricing-plan .price span {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+}
+
+.pricing-plan ul {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 30px;
+    flex-grow: 1;
+}
+
+.pricing-plan ul li {
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+    color: var(--text-color);
+    position: relative;
+    padding-left: 25px;
+}
+
+.pricing-plan ul li::before {
+    content: '✅';
+    position: absolute;
+    left: 0;
+    color: #28a745; /* Green checkmark */
+}
+
+/* Contact Section */
+#contact form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--surface-color);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+}
+
+#contact input,
+#contact textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+#contact textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Footer */
+footer {
+    background-color: var(--heading-color);
+    color: #ffffff;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        margin-top: 15px;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    nav ul li a::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #hero h1 {
+        font-size: 2.5rem;
+    }
+
+    #hero p {
+        font-size: 1.1rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .feature-grid, .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-item, .pricing-plan {
+        margin: 0 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #hero h1 {
+        font-size: 2rem;
+    }
+
+    #hero p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    nav .logo {
+        font-size: 1.5rem;
+    }
+}
