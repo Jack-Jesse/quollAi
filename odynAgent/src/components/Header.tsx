@@ -46,9 +46,6 @@ export function Header({ provider, width, connected }: HeaderProps) {
   // Parse logo lines, trim trailing spaces
   const logoLines = LOGO.split('\n').map(l => l);
 
-  // Calculate layout widths
-  const logoW = Math.max(...logoLines.map(l => l.length));
-
   return (
     <Box flexDirection="column" width={width}>
       {/* Top bar: provider info */}
@@ -72,16 +69,18 @@ export function Header({ provider, width, connected }: HeaderProps) {
         </Box>
       </Box>
 
-      {/* Second row: logo (right-aligned) + CWD (left) */}
-      <Box
-        width={width}
-        paddingX={1}
-        justifyContent="space-between"
-      >
+      {/* Row with CWD (left) and Logo (right-aligned in a box) */}
+      <Box width={width} paddingX={1} justifyContent="space-between">
         <Box>
           <Text dimColor>📂 <Text color="cyan">{displayDir}</Text></Text>
         </Box>
-        <Box flexDirection="column" alignItems="flex-end">
+        <Box
+          borderStyle="single"
+          borderColor="gray"
+          paddingX={1}
+          flexDirection="column"
+          alignItems="flex-end"
+        >
           {logoLines.map((line, i) => (
             <Text key={i} color="cyan" dimColor>
               {line}
