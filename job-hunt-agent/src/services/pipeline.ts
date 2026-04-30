@@ -4,7 +4,7 @@ import { matchJobToResume } from './ai.js';
 import {
   saveJob, isJobSaved, saveResume, updateResumeProfile,
   getActiveResume, saveSearchQueries,
-  createSearchRun, completeSearchRun, setConfig, getActiveModel,
+  createSearchRun, completeSearchRun, setConfig, getActiveModel, getConfig,
   type ResumeProfile,
 } from '../db/database.js';
 import db from '../db/database.js';
@@ -42,7 +42,9 @@ async function analyzeAndStoreResume(
 ): Promise<{ resumeId: number; profile: ResumeProfile }> {
   const activeModel = getActiveModel();
   const modelName = activeModel ? activeModel.name : 'AI';
-  onLog(`\n🧠 Analyzing resume with ${modelName}...`);
+  
+  onLog(`\n✅ Verified resume loaded: ${resumePath.split('/').pop()} (${resumeContent.length} bytes)`);
+  onLog(`🧠 Analyzing resume with ${modelName}...`);
 
   const { analyzeResume } = await import('./ai.js');
   const profile = await analyzeResume(resumeContent);
@@ -75,8 +77,13 @@ async function generateAndStoreQueries(
 ): Promise<any[]> {
   onLog(`\n🔍 Generating search queries from profile...`);
 
+  const targetLoc = getConfig('target_location');
+  if (targetLoc) {
+    onLog(`  📍 User target location: ${targetLoc}`);
+  }
+
   const { generateSearchQueries } = await import('./ai.js');
-  const queries = await generateSearchQueries(profile);
+  const queries = await generateSearchQueries(profile, targetLoc);
 
   if (queries.length === 0) {
     onLog(`  ⚠️  No queries generated. Using fallback.`);

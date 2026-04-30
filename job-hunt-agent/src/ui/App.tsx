@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Text, useInput, useStdout } from 'ink';
 import db, {
   getAllModels, getActiveModel, addModel, setActiveModel,
-  deleteModel, updateModel, seedDefaultModels,
+  deleteModel, updateModel, seedDefaultModels, getConfig, setConfig,
   type ModelConfig,
 } from '../db/database.js';
 import fs from 'fs';
@@ -15,6 +15,7 @@ const bannerText = fs.readFileSync(path.join(__dirname, 'banner.txt'), 'utf-8');
 type Screen =
   | 'menu'
   | 'inputPath'
+  | 'profileSetup'
   | 'searching'
   | 'results'
   | 'models'
@@ -51,6 +52,7 @@ export default function App() {
   const [resumePath, setResumePath] = useState<string>('');
   const [resumeLoaded, setResumeLoaded] = useState<boolean>(false);
   const [resumeContent, setResumeContent] = useState<string>('');
+  const [targetLocation, setTargetLocation] = useState<string>('');
   const [jobs, setJobs] = useState<any[]>([]);
   const [searchLog, setSearchLog] = useState<string[]>([]);
   const [inputBuffer, setInputBuffer] = useState<string>('');
@@ -76,6 +78,7 @@ export default function App() {
 
   const menuItems = [
     { label: '📄  Load Resume (PDF / MD)', screen: 'inputPath' as Screen },
+    { label: '👤  Profile Setup (Location)', screen: 'profileSetup' as Screen },
     { label: '🔍  Start Job Search', screen: 'searching' as Screen },
     { label: '📋  View Saved Jobs', screen: 'results' as Screen },
     { label: '⚙️  Models & Settings', screen: 'models' as Screen },
@@ -87,6 +90,8 @@ export default function App() {
     seedDefaultModels();
     loadModels();
     try {
+      const loc = getConfig('target_location');
+      if (loc) setTargetLocation(loc);
       const row = db.prepare("SELECT value FROM config WHERE key = 'resume_path'").get() as any;
       if (row && row.value && fs.existsSync(row.value)) {
         const filePath = row.value;
@@ -195,6 +200,24 @@ export default function App() {
     }
 
     // ── INPUT PATH (resume) ──
+    if (screen === 'profileSetup') {
+      if (key.return) {
+        const trimmed = inputBuffer.trim();
+        setTargetLocation(trimmed);
+        setConfig('target_location', trimmed);
+        flash(`✅ Target location saved: ${trimmed}`);
+        setInputBuffer('');
+        setScreen('menu');
+      } else if (key.backspace || key.delete) {
+        setInputBuffer(b => b.slice(0, -1));
+      } else if (input && !key.escape) {
+        setInputBuffer(b => b + input);
+      } else if (key.escape) {
+        setInputBuffer('');
+        setScreen('menu');
+      }
+    }
+
     if (screen === 'inputPath') {
       if (key.return) {
         const trimmed = inputBuffer.trim();
@@ -629,6 +652,21 @@ export default function App() {
         {/* ═══════════════════════════════════════════ */}
         {/* RESUME INPUT                              */}
         {/* ═══════════════════════════════════════════ */}
+        {screen === 'profileSetup' && (
+          <Box flexDirection="column" flexGrow={1}>
+            <Text bold color="cyan">👤 PROFILE SETUP</Text>
+            <Box marginTop={1} flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={2} paddingY={1}>
+              <Text color="gray">Where do you want to look for work? (e.g. "Sydney", "Remote", "Global"):</Text>
+              <Box marginTop={1}>
+                <Text color="cyan" bold>Location: </Text>
+                <Text color="white" bold>{inputBuffer || targetLocation}<Text color="cyan" backgroundColor="gray"> </Text></Text>
+              </Box>
+            </Box>
+            <Box marginTop={2}><Text color="cyan">{thinSep}</Text></Box>
+            <Text color="gray">Enter confirm • ESC back</Text>
+          </Box>
+        )}
+
         {screen === 'inputPath' && (
           <Box flexDirection="column" flexGrow={1}>
             <Text bold color="red">📄 LOAD RESUME</Text>
