@@ -1,4 +1,6 @@
 import Database from 'better-sqlite3';
+import fs from 'fs';
+import path from 'path';
 
 const db = new Database('jobs.db');
 
@@ -350,61 +352,30 @@ export function seedDefaultModels() {
   if (count && count > 0) return;
 
   const glmKey = process.env.GLM_API_KEY || '';
-  const glmUrl = 'https://api.z.ai/api/coding/paas/v4';
+  
+  let configData: any;
+  try {
+    const configPath = path.join(process.cwd(), 'config', 'models.json');
+    configData = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  } catch (err: any) {
+    console.error('Failed to load config/models.json:', err.message);
+    return;
+  }
 
   db.transaction(() => {
-    // ── Z.AI / GLM models (live from api.z.ai) ──
-    const glmModels = [
-      { name: 'GLM-5.1',       model: 'glm-5.1' },
-      { name: 'GLM-5-Turbo',   model: 'glm-5-turbo' },
-      { name: 'GLM-5',         model: 'glm-5' },
-      { name: 'GLM-4.7',       model: 'glm-4.7' },
-      { name: 'GLM-4.6',       model: 'glm-4.6' },
-      { name: 'GLM-4.5',       model: 'glm-4.5' },
-      { name: 'GLM-4.5-Flash', model: 'glm-4.5-flash' },
-      { name: 'GLM-4.5-Air',   model: 'glm-4.5-air' },
-    ];
-
-    glmModels.forEach((m, i) => {
-      db.prepare(`
-        INSERT INTO models (name, provider, base_url, api_key, model, is_active)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `).run(m.name, 'glm', glmUrl, glmKey, m.model, i === 0 ? 1 : 0);
-    });
-
-    // ── Ollama local models ──
-    const ollamaModels = [
-      { name: 'Ollama Llama3',       model: 'llama3' },
-      { name: 'Ollama Llama3.1',     model: 'llama3.1' },
-      { name: 'Ollama Mistral',      model: 'mistral' },
-      { name: 'Ollama Qwen2.5',      model: 'qwen2.5' },
-      { name: 'Ollama DeepSeek-R1', model: 'deepseek-r1' },
-      { name: 'Ollama Codellama',   model: 'codellama' },
-      { name: 'Ollama Phi3',        model: 'phi3' },
-      { name: 'Ollama Gemma2',      model: 'gemma2' },
-    ];
-
-    ollamaModels.forEach((m) => {
-      db.prepare(`
-        INSERT INTO models (name, provider, base_url, api_key, model, is_active)
-        VALUES (?, ?, ?, ?, ?, 0)
-      `).run(m.name, 'ollama', 'http://localhost:11434/v1', '', m.model);
-    });
-
-    // ── OpenAI ──
-    const openaiModels = [
-      { name: 'OpenAI GPT-4o',      model: 'gpt-4o' },
-      { name: 'OpenAI GPT-4o-mini',  model: 'gpt-4o-mini' },
-      { name: 'OpenAI GPT-4-turbo', model: 'gpt-4-turbo' },
-      { name: 'OpenAI o3-mini',     model: 'o3-mini' },
-    ];
-
-    openaiModels.forEach((m) => {
-      db.prepare(`
-        INSERT INTO models (name, provider, base_url, api_key, model, is_active)
-        VALUES (?, ?, ?, ?, ?, 0)
-      `).run(m.name, 'openai', 'https://api.openai.com/v1', '', m.model);
-    });
+    let isFirst = true;
+    for (const [provider, data] of Object.entries(configData)) {
+      const providerData = data as { baseUrl: string; models: { name: string; model: string }[] };
+      const apiKey = provider === 'glm' ? glmKey : '';
+      
+      providerData.models.forEach((m) => {
+        db.prepare(`
+          INSERT INTO models (name, provider, base_url, api_key, model, is_active)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `).run(m.name, provider, providerData.baseUrl, apiKey, m.model, isFirst ? 1 : 0);
+        isFirst = false;
+      });
+    }
   })();
 }
 
