@@ -1,12 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'ink';
 import { Provider, ProviderType, MLX_PRESETS } from '../lib/config.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const LOGO = fs.readFileSync(path.join(__dirname, 'logo.txt'), 'utf8');
 
 const TYPE_COLORS: Record<ProviderType, string> = {
   'local-mlx': 'magenta',
@@ -42,9 +36,6 @@ export function Header({ provider, width, connected }: HeaderProps) {
   if (displayDir.length > maxDirLen) {
     displayDir = '…' + displayDir.slice(displayDir.length - maxDirLen + 1);
   }
-
-  // Parse logo lines, trim trailing spaces
-  const logoLines = LOGO.split('\n').map(l => l);
 
   return (
     <Box flexDirection="column" width={width}>
