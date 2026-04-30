@@ -5,7 +5,7 @@ import { MessageList } from './components/MessageList.js';
 import { TodoDock } from './components/TodoDock.js';
 import { PromptInput } from './components/PromptInput.js';
 import { LoadingIndicator } from './components/LoadingIndicator.js';
-import { SplashScreen } from './components/SplashScreen.js';
+import { Banner } from './components/Banner.js';
 import { ModelSelector } from './components/ModelSelector.js';
 import { AddProviderForm } from './components/AddProviderForm.js';
 import { DownloadScreen } from './components/DownloadScreen.js';
@@ -179,7 +179,7 @@ export default function App() {
   }, [config, handleSelectProvider, handleSaveNewProvider]);
 
   // ── Layout ──────────────────────────────────────────────────────
-  const headerH = 105;
+  const headerH = 4;
   const inputH = 3;
   const statusH = 1;
   // Get latest TODO items from steps
@@ -191,10 +191,6 @@ export default function App() {
   const msgH = Math.max(1, height - headerH - inputH - statusH - todoH - 2);
 
   // ── Screens ─────────────────────────────────────────────────────
-  if (state.steps.length === 0) {
-    return <SplashScreen width={width} height={height} />;
-  }
-
   if (screen === 'models') {
     return (
       <ModelSelector
