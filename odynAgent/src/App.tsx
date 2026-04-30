@@ -179,9 +179,7 @@ export default function App() {
   }, [config, handleSelectProvider, handleSaveNewProvider]);
 
   // ── Layout ──────────────────────────────────────────────────────
-  // Header: border bar (2) + CWD row with logo (logo is 19 lines tall)
-  const LOGO_LINES = 19;
-  const headerH = 2 + LOGO_LINES;
+  const headerH = 4;
   const inputH = 3;
   const statusH = 1;
   // Get latest TODO items from steps

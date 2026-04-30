@@ -69,24 +69,9 @@ export function Header({ provider, width, connected }: HeaderProps) {
         </Box>
       </Box>
 
-      {/* Row with CWD (left) and Logo (right-aligned in a box) */}
-      <Box width={width} paddingX={1} justifyContent="space-between">
-        <Box>
-          <Text dimColor>📂 <Text color="cyan">{displayDir}</Text></Text>
-        </Box>
-        <Box
-          borderStyle="single"
-          borderColor="gray"
-          paddingX={1}
-          flexDirection="column"
-          alignItems="flex-end"
-        >
-          {logoLines.map((line, i) => (
-            <Text key={i} color="cyan" dimColor>
-              {line}
-            </Text>
-          ))}
-        </Box>
+      {/* CWD row */}
+      <Box width={width} paddingX={1}>
+        <Text dimColor>📂 <Text color="cyan">{displayDir}</Text></Text>
       </Box>
     </Box>
   );
