@@ -124,8 +124,13 @@ export function initDb() {
 // ─────────────────────────────────────────────
 
 export function saveResume(filePath: string, rawContent: string): number {
+  const existing = db.prepare('SELECT id FROM resumes WHERE file_path = ?').get(filePath) as any;
+  if (existing) {
+    db.prepare('UPDATE resumes SET raw_content = ? WHERE id = ?').run(rawContent, existing.id);
+    return existing.id;
+  }
   return db.prepare(`
-    INSERT OR REPLACE INTO resumes (file_path, raw_content)
+    INSERT INTO resumes (file_path, raw_content)
     VALUES (?, ?)
   `).run(filePath, rawContent).lastInsertRowid as number;
 }
