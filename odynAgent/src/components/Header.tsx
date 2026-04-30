@@ -4,9 +4,10 @@ import { Provider, ProviderType, MLX_PRESETS } from '../lib/config.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const LOGO = fs.readFileSync(path.join(__dirname, 'logo.txt'), 'utf8');
+const LOGO = fs.readFileSync(path.join(__dirname, 'logo-full.txt'), 'utf8');
 
 const TYPE_COLORS: Record<ProviderType, string> = {
   'local-mlx': 'magenta',
@@ -38,40 +39,40 @@ export function Header({ provider, width, connected }: HeaderProps) {
   if (homeDir && cwd.startsWith(homeDir)) {
     displayDir = '~' + cwd.slice(homeDir.length);
   }
-  const maxDirLen = Math.max(10, Math.floor((width - 60) / 2));
-  if (displayDir.length > maxDirLen) {
-    displayDir = '…' + displayDir.slice(displayDir.length - maxDirLen + 1);
-  }
 
-  // Parse logo lines, trim trailing spaces
-  const logoLines = LOGO.split('\n').map(l => l);
+  const logoLines = LOGO.split('\n');
 
   return (
-    <Box flexDirection="column" width={width}>
-      {/* Top bar: provider info */}
-      <Box
-        width={width}
-        borderStyle="single"
-        borderColor="gray"
-        paddingX={1}
-        justifyContent="space-between"
-      >
-        <Box gap={1}>
-          <Text bold color="cyan">Odyn</Text>
-          <Text dimColor>│</Text>
-          <Text>{icon}</Text>
-          <Text color={typeColor} bold>{provider.name}</Text>
+    <Box flexDirection="row" width={width} borderStyle="single" borderColor="gray">
+      {/* Left side: Provider info + CWD */}
+      <Box flexDirection="column" width={Math.max(40, width - 100)}>
+        <Box paddingX={1} borderStyle="single" borderColor="gray" borderBottom={true} borderLeft={false} borderTop={false} borderRight={false}>
+          <Box gap={1}>
+            <Text bold color="cyan">Odyn</Text>
+            <Text dimColor>│</Text>
+            <Text>{icon}</Text>
+            <Text color={typeColor} bold>{provider.name}</Text>
+          </Box>
+          <Box gap={1} marginTop={1}>
+            <Text dimColor>{provider.model.length > 35 ? provider.model.slice(0, 35) + '…' : provider.model}{sizeTag}</Text>
+            <Text dimColor>│</Text>
+            <Text color={connected ? 'green' : 'yellow'}>{connected ? '● connected' : '○ connecting…'}</Text>
+          </Box>
         </Box>
-        <Box gap={1}>
-          <Text dimColor>{provider.model.length > 35 ? provider.model.slice(0, 35) + '…' : provider.model}{sizeTag}</Text>
-          <Text dimColor>│</Text>
-          <Text color={connected ? 'green' : 'yellow'}>{connected ? '● connected' : '○ connecting…'}</Text>
+        <Box paddingX={1} marginTop={1}>
+          <Text dimColor>📂 <Text color="cyan">{displayDir}</Text></Text>
         </Box>
       </Box>
 
-      {/* CWD row */}
-      <Box width={width} paddingX={1}>
-        <Text dimColor>📂 <Text color="cyan">{displayDir}</Text></Text>
+      {/* Right side: Logo */}
+      <Box paddingX={1} borderStyle="single" borderColor="gray" borderLeft={true} borderRight={false} borderTop={false} borderBottom={false}>
+         <Box flexDirection="column">
+            {logoLines.map((line, i) => (
+              <Text key={i} color="cyan" dimColor>
+                {line}
+              </Text>
+            ))}
+         </Box>
       </Box>
     </Box>
   );

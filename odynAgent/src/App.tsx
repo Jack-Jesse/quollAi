@@ -179,7 +179,7 @@ export default function App() {
   }, [config, handleSelectProvider, handleSaveNewProvider]);
 
   // ── Layout ──────────────────────────────────────────────────────
-  const headerH = 4;
+  const headerH = 105;
   const inputH = 3;
   const statusH = 1;
   // Get latest TODO items from steps
