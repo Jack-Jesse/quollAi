@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const LOGO = fs.readFileSync(path.join(__dirname, 'logo-full.txt'), 'utf8');
+const LOGO_SMALL = fs.readFileSync(path.join(__dirname, 'logo-small.txt'), 'utf8');
 
 const TYPE_COLORS: Record<ProviderType, string> = {
   'local-mlx': 'magenta',
@@ -40,21 +40,19 @@ export function Header({ provider, width, connected }: HeaderProps) {
     displayDir = '~' + cwd.slice(homeDir.length);
   }
 
-  const logoLines = LOGO.split('\n');
-
   return (
     <Box flexDirection="row" width={width} borderStyle="single" borderColor="gray">
       {/* Left side: Provider info + CWD */}
-      <Box flexDirection="column" width={Math.max(40, width - 100)}>
-        <Box paddingX={1} borderStyle="single" borderColor="gray" borderBottom={true} borderLeft={false} borderTop={false} borderRight={false}>
+      <Box flexDirection="column" width={Math.max(40, width - 40)}>
+        <Box paddingX={1} borderBottom={true} borderColor="gray" justifyContent="space-between">
           <Box gap={1}>
             <Text bold color="cyan">Odyn</Text>
             <Text dimColor>│</Text>
             <Text>{icon}</Text>
             <Text color={typeColor} bold>{provider.name}</Text>
           </Box>
-          <Box gap={1} marginTop={1}>
-            <Text dimColor>{provider.model.length > 35 ? provider.model.slice(0, 35) + '…' : provider.model}{sizeTag}</Text>
+          <Box gap={1}>
+            <Text dimColor>{provider.model.length > 20 ? provider.model.slice(0, 20) + '…' : provider.model}{sizeTag}</Text>
             <Text dimColor>│</Text>
             <Text color={connected ? 'green' : 'yellow'}>{connected ? '● connected' : '○ connecting…'}</Text>
           </Box>
@@ -64,10 +62,10 @@ export function Header({ provider, width, connected }: HeaderProps) {
         </Box>
       </Box>
 
-      {/* Right side: Logo */}
-      <Box paddingX={1} borderStyle="single" borderColor="gray" borderLeft={true} borderRight={false} borderTop={false} borderBottom={false}>
+      {/* Right side: Tiny Logo */}
+      <Box paddingX={1} borderLeft={true} borderColor="gray">
          <Box flexDirection="column">
-            {logoLines.map((line, i) => (
+            {LOGO_SMALL.split('\n').map((line, i) => (
               <Text key={i} color="cyan" dimColor>
                 {line}
               </Text>
