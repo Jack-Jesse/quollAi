@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { FileUpload } from "@ark-ui/react/file-upload";
 import LinearBasic from "@/components/ui/progress-1";
+
 import {
   FileText,
   Upload,
@@ -88,11 +89,11 @@ export default function HeroSection() {
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [currentNotes, setCurrentNotes] = useState<string[]>([]);
+  const [currentNote, setCurrentNote] = useState<string>("");
 
   const analyzeResume = useCallback(async (file: File) => {
     setStatus("analyzing");
-    setCurrentNotes([]);
+    setCurrentNote("");
     setError(null);
     setProgress(2); // Initial progress
 
@@ -184,39 +185,39 @@ export default function HeroSection() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setStatus("error");
-      setCurrentNotes([]);
+      setCurrentNote("");
       setProgress(0);
     }
   }, []);
 
   const learningNotes = [
-    "Scanning your contact details...",
-    "Reading professional summary...",
-    "Extracting work experience...",
-    "Identifying core skills...",
-    "Analyzing education background...",
+    "Reading contact info...",
+    "Scanning professional summary...",
+    "Parsing work experience...",
+    "Identifying key skills...",
+    "Analyzing education...",
     "Evaluating achievements...",
-    "Synthesizing insights...",
+    "Matching job opportunities...",
   ];
 
   useEffect(() => {
     if (status !== "analyzing") {
-      setCurrentNotes([]);
+      setCurrentNote("");
       return;
     }
 
     let index = 0;
     const interval = setInterval(() => {
       if (index < learningNotes.length) {
-        setCurrentNotes((prev) => [...prev, learningNotes[index]]);
+        setCurrentNote(learningNotes[index]);
         index++;
       } else {
         clearInterval(interval);
       }
-    }, 700);
+    }, 800);
 
     return () => clearInterval(interval);
-  }, [status, learningNotes]);
+  }, [status]);
 
   return (
     <section className="relative overflow-hidden border-b">
@@ -360,23 +361,14 @@ export default function HeroSection() {
             )}
 
             {status === "analyzing" && (
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-6 min-h-[380px]">
+              <div className="rounded-2xl border border-border bg-card p-6 shadow-sm flex items-center justify-center min-h-[380px]">
                 <div className="text-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-2" />
-                  <h3 className="text-lg font-semibold text-foreground">AI is learning your resume</h3>
-                  <p className="text-sm text-muted-foreground">Discovering your experience and skills in real-time</p>
-                </div>
-                <div className="space-y-3 max-w-md mx-auto">
-                  {currentNotes.map((note, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border/30 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-100"
-                      style={{ animationDelay: `${i * 150}ms` }}
-                    >
-                      <div className="w-2 h-2 bg-primary rounded-full mt-2.5 flex-shrink-0" />
-                      <span className="text-sm text-foreground leading-relaxed flex-1">{note}</span>
-                    </div>
-                  ))}
+                  <div className="flex items-center gap-3 justify-center mb-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                    <span className="text-sm text-muted-foreground">
+                      {currentNote || "Preparing analysis..."}
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
