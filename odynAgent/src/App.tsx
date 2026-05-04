@@ -9,6 +9,7 @@ import { Banner } from './components/Banner.js';
 import { ModelSelector } from './components/ModelSelector.js';
 import { AddProviderForm } from './components/AddProviderForm.js';
 import { DownloadScreen } from './components/DownloadScreen.js';
+import { OpenRouterManager } from './components/OpenRouterManager.js';
 import { useChat } from './hooks/useChat.js';
 import { useTerminalSize } from './hooks/useTerminalSize.js';
 import { MlxRunner } from './lib/mlx-runner.js';
@@ -22,8 +23,9 @@ import {
   createProvider,
   isModelCached,
 } from './lib/config.js';
+import { openRouterManager } from './lib/openrouter-manager.js';
 
-type Screen = 'chat' | 'models' | 'add-provider' | 'download';
+type Screen = 'chat' | 'models' | 'add-provider' | 'download' | 'openrouter-manager';
 type ChatMode = 'agent' | 'chat';
 
 export default function App() {
@@ -178,6 +180,13 @@ export default function App() {
     handleSaveNewProvider(newProvider);
   }, [config, handleSelectProvider, handleSaveNewProvider]);
 
+  const handleAddOpenRouterProvider = useCallback((provider: Provider) => {
+    const updated = { ...config, providers: [...config.providers, provider], activeProviderId: provider.id };
+    setConfig(updated);
+    saveConfig(updated);
+    setScreen('chat');
+  }, [config]);
+
   // ── Layout ──────────────────────────────────────────────────────
   const headerH = 30;
   const inputH = 3;
@@ -197,6 +206,7 @@ export default function App() {
         config={config} onSelect={handleSelectProvider} onAdd={handleAddProvider}
         onDelete={handleDeleteProvider} onDownload={handleDownload}
         onAddPreset={handleAddPreset} onBack={() => setScreen('chat')}
+        onOpenRouterManager={() => setScreen('openrouter-manager')}
         width={width} height={height}
       />
     );
@@ -218,6 +228,16 @@ export default function App() {
     );
   }
 
+  if (screen === 'openrouter-manager') {
+    return (
+      <OpenRouterManager 
+        onProviderSelect={handleAddOpenRouterProvider}
+        onClose={() => setScreen('models')}
+        width={width} height={height}
+      />
+    );
+  }
+
   // ── Chat screen ──────────────────────────────────────────────────
   const lastMsg = state.messages[state.messages.length - 1];
   const showSpinner = state.isGenerating && lastMsg?.role === 'assistant' && lastMsg.content === '';
@@ -226,48 +246,57 @@ export default function App() {
   return (
     <Box flexDirection="column" width={width} height={height}>
       <Header provider={activeProvider} width={width} connected={connected} />
+      
+      {/* Banner - always show when there are no messages */}
+      {state.messages.length === 0 && (
+        <Box flexDirection="column" paddingX={1}>
+          <Banner width={width} />
+          
+          {connecting && (
+            <Box gap={1} marginTop={1}>
+              <Text color="yellow">⏳ Loading model into GPU memory…</Text>
+              <Text dimColor>(first run downloads ~2GB, then caches locally)</Text>
+            </Box>
+          )}
+          
+          {bridgeError && (
+            <Box flexDirection="column" gap={1} marginTop={1}>
+              <Text color="red">⚠ {bridgeError}</Text>
+              <Text dimColor>Make sure mlx-lm is installed: <Text color="cyan">pip3 install mlx-lm</Text></Text>
+            </Box>
+          )}
+          
+          {!connecting && !bridgeError && (
+            <Box flexDirection="column" gap={1} marginTop={1}>
+              <Text dimColor>Run any MLX model from HuggingFace — fully local, no cloud needed.</Text>
+              <Text dimColor />
+              <Text bold color="green">Active model:</Text>
+              <Text color="white">  {activeProvider.model}</Text>
+              <Text dimColor />
+              <Text bold>Commands:</Text>
+              <Text dimColor>  /model   — Switch models, browse presets, download new ones</Text>
+              <Text dimColor>  /agent   — Switch to agent mode (uses tools autonomously)</Text>
+              <Text dimColor>  /chat    — Switch to chat mode (no tools, plain conversation)</Text>
+              <Text dimColor>  Ctrl+M   — Open model selector</Text>
+              <Text dimColor>  Esc      — Interrupt generation / Exit</Text>
+              <Text dimColor />
+              <Text dimColor>Mode: <Text bold color={chatMode === 'agent' ? 'magenta' : 'cyan'}>{chatMode === 'agent' ? '🤖 Agent' : '💬 Chat'}</Text></Text>
+            </Box>
+          )}
+        </Box>
+      )}
 
       <Box flexDirection="column" height={msgH} overflowY="hidden" paddingX={1}>
-        {state.messages.length === 0 && (
-          <Box flexDirection="column" gap={1} paddingY={1}>
-            <Banner width={width} />
-            {connecting && (
-              <Box gap={1}>
-                <Text color="yellow">⏳ Loading model into GPU memory…</Text>
-                <Text dimColor>(first run downloads ~2GB, then caches locally)</Text>
+        {state.messages.length > 0 && (
+          <>
+            <MessageList messages={state.messages} steps={state.steps} maxHeight={msgH - 2} />
+            {showSpinner && <LoadingIndicator />}
+            {state.error && (
+              <Box marginTop={1}>
+                <Text color="red">⚠ {state.error}</Text>
               </Box>
             )}
-            {bridgeError && (
-              <Box flexDirection="column" gap={1}>
-                <Text color="red">⚠ {bridgeError}</Text>
-                <Text dimColor>Make sure mlx-lm is installed: <Text color="cyan">pip3 install mlx-lm</Text></Text>
-              </Box>
-            )}
-            {!connecting && !bridgeError && (
-              <>
-                <Text dimColor>Run any MLX model from HuggingFace — fully local, no cloud needed.</Text>
-                <Text dimColor />
-                <Text bold color="green">Active model:</Text>
-                <Text color="white">  {activeProvider.model}</Text>
-                <Text dimColor />
-                <Text bold>Commands:</Text>
-                <Text dimColor>  /model   — Switch models, browse presets, download new ones</Text>
-                <Text dimColor>  /agent   — Switch to agent mode (uses tools autonomously)</Text>
-                <Text dimColor>  /chat    — Switch to chat mode (no tools, plain conversation)</Text>
-                <Text dimColor>  Ctrl+M   — Open model selector</Text>
-                <Text dimColor>  Esc      — Interrupt generation / Exit</Text>
-                <Text dimColor />
-                <Text dimColor>Mode: <Text bold color={chatMode === 'agent' ? 'magenta' : 'cyan'}>{chatMode === 'agent' ? '🤖 Agent' : '💬 Chat'}</Text></Text>
-              </>
-            )}
-          </Box>
-        )}
-        <MessageList messages={state.messages} steps={state.steps} maxHeight={msgH - 2} />
-        {showSpinner && <LoadingIndicator />}
-        {state.error && (
-          <Box marginTop={1}>
-            <Text color="red">⚠ {state.error}</Text>
-          </Box>
+          </>
         )}
       </Box>
 
