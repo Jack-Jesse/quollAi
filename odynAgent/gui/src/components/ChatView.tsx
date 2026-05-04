@@ -263,7 +263,29 @@ function EmptyState({
         </button>
       </div>
 
-      {/* Connection status */}
+      {/* Connection status - prominent warning for local MLX */}
+      {provider?.type === "local-mlx" && (
+        <div className="mt-6 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 max-w-lg">
+          <div className="flex items-start gap-3">
+            <Cpu className="w-5 h-5 text-yellow-400 mt-0.5 shrink-0" />
+            <div>
+              <p className="text-xs font-medium text-yellow-400 mb-2">
+                ⚠️ MLX Server Required
+              </p>
+              <p className="text-[10px] text-yellow-400/80 mb-2">
+                Start the MLX server in another terminal:
+              </p>
+              <code className="block px-2 py-1.5 rounded bg-surface-300 text-gray-300 font-mono text-[9px] mb-2">
+                python3 -m mlx_lm.server --model {provider.model} --port {provider.port || 8080}
+              </code>
+              <p className="text-[10px] text-gray-500">
+                Or switch to cloud API in Settings → Model Picker
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {connecting && (
         <div className="mt-6 flex items-center gap-2 text-xs text-yellow-400/70">
           <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
@@ -271,20 +293,10 @@ function EmptyState({
         </div>
       )}
 
-      {provider?.type === "local-mlx" && !connecting && (
-        <div className="mt-6 flex items-center gap-2 text-[10px] text-gray-600">
-          <Cpu className="w-3 h-3" />
-          Make sure the MLX server is running:
-          <code className="px-1.5 py-0.5 rounded bg-surface-300 text-gray-400 font-mono">
-            python3 -m mlx_lm.server --model {provider.model} --port {provider.port || 8080}
-          </code>
-        </div>
-      )}
-
       {provider?.type === "cloud-api" && (
-        <div className="mt-6 flex items-center gap-2 text-[10px] text-gray-600">
+        <div className="mt-6 flex items-center gap-2 text-[10px] text-green-400">
           <Cloud className="w-3 h-3" />
-          Connected to {provider.name}
+          Connected to cloud API
         </div>
       )}
     </div>
